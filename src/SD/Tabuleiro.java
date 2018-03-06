@@ -3,6 +3,9 @@ package SD;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,6 +15,7 @@ import javax.swing.JPanel;
 public class Tabuleiro extends JFrame {
 	
 Casa casa[][];
+private Socket cliente;
 
 	public void CriarTabuleiro() {
 
@@ -121,7 +125,10 @@ Casa casa[][];
 		
 		
 	}
-	public void ExibirTabuleiro(){
+	public void ExibirTabuleiro() throws UnknownHostException, IOException{
+		
+		cliente = new Socket("10.11.150.71", 1234);
+		
 		System.out.println("  1  2  3  4  5  6  7  8");	
 		for (int i = 0; i < casa.length; i++) {
 			
