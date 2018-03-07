@@ -1,33 +1,51 @@
 package SD;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-public class Cliente {	
+public class Cliente {
 
-	Socket socket;
-	private static final String IP = "localhost";
-	public Cliente()  {
-	try {
-		Socket ClienteSocket = new Socket(IP, Servidor.PORTA);
-		BufferedReader recebidoServidor = new BufferedReader(new InputStreamReader(ClienteSocket.getInputStream()));
-		DataOutputStream enviarServer = new DataOutputStream(ClienteSocket.getOutputStream()); 
-		System.out.println("Recebido do servidor: " + recebidoServidor.readLine());
-		enviarServer.writeBytes("Boas Vindas" + "\n");
-		
-		ClienteSocket.close();
-	} catch (Exception e) {
-		e.printStackTrace();
-	}		
-	
-		
-	}
-	public static void main(String[] args) {
-		new Cliente();
-	}
-	
+    private int codigo, codDesafiante;
+    private Mensageiro mensageiro;
+
+
+    public Cliente() {
+
+        codDesafiante = -1;
+        mensageiro = null;
+    }
+
+    private void conectar() {
+
+        try {
+            Socket clienteSocket = new Socket(Servidor.IP, Servidor.PORTA);
+
+            mensageiro = new Mensageiro(clienteSocket);
+
+            String msg = mensageiro.ler();
+            codigo = Integer.parseInt(mensageiro.ler());
+            System.out.println("Handshake client: <" + msg + ">, codigo: " + codigo);
+            msg = "Ola servidor, recebi o codigo " + codigo;
+            mensageiro.enviar(msg);
+
+            dadosDesafiante();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void dadosDesafiante() {
+
+        String msg = mensageiro.ler();
+        String cod = mensageiro.ler();
+        codDesafiante = Integer.parseInt(cod == null ? "-1" : cod);
+        System.out.println("Playing client: '" + msg + "' desafiante '" + codDesafiante + "'");
+    }
+
+
+    public static void main(String[] args) {
+        new Cliente().conectar();
+    }
 }
