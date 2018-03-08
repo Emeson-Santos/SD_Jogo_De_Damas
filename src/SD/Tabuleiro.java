@@ -1,154 +1,116 @@
 package SD;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 public class Tabuleiro extends JFrame {
-	
-Casa casa[][];
-private Socket cliente;
 
-	public void CriarTabuleiro() {
+    Casa casa[][];
+    private Socket cliente;
 
-		//criando uma matriz para formação do tabuleiro 
-		
-		GridLayout gridLayout = new GridLayout(8, 8, 5,5);
-		JPanel jPanel1 = new JPanel();
-		jPanel1.setLayout(gridLayout);
+    public void CriarTabuleiro() {
 
-		setResizable(false);
-		casa = new Casa[8][8];
-		
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				
-				Casa c = new Casa(i, j);
-				
-				if ((i+j) % 2 == 0){
-					c.setBackground(Color.WHITE);
-				}else{
-					c.setBackground(Color.RED);
-				}
-				casa[i][j] = c;
-				jPanel1.add(c);
-			}
+        //criando uma matriz para formaï¿½ï¿½o do tabuleiro
 
-		}
-		add(jPanel1);
-		pack();
-		
-		
-		
-		
-		
-		
-		
-/*
-		System.out.println(" 1  2   3  4  5 6 7  8");
+        GridLayout gridLayout = new GridLayout(8, 8, 5, 5);
+        JPanel jPanel1 = new JPanel();
+        jPanel1.setLayout(gridLayout);
 
-		
-		
-		for (int i = 0; i < casa.length; i++) {
+        setResizable(false);
+        casa = new Casa[8][8];
 
-			String str = String.valueOf(i+1);
-			System.out.print(str);
-			for (int j = 0; j < casa[0].length; j++) {	
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
 
-				casa[i][j]= new Casa();
-				casa[i][j].setStatus(true);
+                Casa c = new Casa(this, i, j);
 
+                if ((i + j) % 2 == 0) {
+                    c.setBackground(Color.WHITE);
+                } else {
+                    c.setBackground(Color.RED);
+                }
+                casa[i][j] = c;
+                jPanel1.add(c);
+            }
 
-				if ((i+j)%2==0){
-					casa[i][j].setCor("*");
-					System.out.print("  " + casa[i][j].getCor()+ " "); 
+        }
+        add(jPanel1);
+        pack();
 
-					//System.out.println("Preta");
-				}else{
-					casa[i][j].setCor("#");
-					System.out.print("  " + casa[i][j].getCor()+ " ");
+        System.out.println();
 
-				}
+    }
 
-			}
-			*/
+    public void Pecajogador1() {
 
-			System.out.println();
-		
-	}
-	
-	public void Pecajogador1(){
+        //System.out.print("aqui");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 8; j++) {
 
-		//System.out.print("aqui");
-		for (int i = 0; i < 3; i++) {			
-			for (int j = 0; j < 8; j++) {
+                if ((i + j) % 2 != 0) {
 
-				if ((i+j)%2 != 0){
-					
-					casa[i][j].setOcupado(true);
-					casa[i][j].alterarPeca(Pecas.PRETA);
+                    casa[i][j].setOcupado(true);
+                    casa[i][j].alterarPeca(Pecas.PRETA);
 
-					//System.out.print(""+casa[i][j].pecas.getCor());
-				//	System.out.print("i: "+i+"j: "+j);
-				}				
-			}
-		}
-	}
+                    //System.out.print(""+casa[i][j].pecas.getCor());
+                    //	System.out.print("i: "+i+"j: "+j);
+                }
+            }
+        }
+    }
 
-	public void Pecajogador2(){
-		//System.out.println("Jogador 2");
-		//System.out.print("aqui");
-		for (int i = 7; i >= 5; i--) {			
-			for (int j = 7; j >= 0; j--) {
+    public void Pecajogador2() {
+        //System.out.println("Jogador 2");
+        //System.out.print("aqui");
+        for (int i = 7; i >= 5; i--) {
+            for (int j = 7; j >= 0; j--) {
 
-				if ((i+j)%2 != 0){
-					
-					casa[i][j].setOcupado(true);
-					casa[i][j].alterarPeca(Pecas.BRANCA);
-					//casa[i][j].pecas.setCor("$" );		 
+                if ((i + j) % 2 != 0) {
 
-					//System.out.print(""+casa[i][j].pecas.getCor());
-				//	System.out.print("i: "+i+"j: "+j);
-				}				
+                    casa[i][j].setOcupado(true);
+                    casa[i][j].alterarPeca(Pecas.BRANCA);
+                    //casa[i][j].pecas.setCor("$" );
+
+                    //System.out.print(""+casa[i][j].pecas.getCor());
+                    //	System.out.print("i: "+i+"j: "+j);
+                }
 
 
-			}
-		}
-		
-		
-	}
-	public void ExibirTabuleiro() throws UnknownHostException, IOException{
-		
-		cliente = new Socket("10.11.150.71", 1234);
-		
-		System.out.println("  1  2  3  4  5  6  7  8");	
-		for (int i = 0; i < casa.length; i++) {
-			
-			String str = String.valueOf(i+1);
-			System.out.print(str);
-			
-			for (int j = 0; j < casa[0].length; j++) {
+            }
+        }
+    }
 
-				if (casa[i][j].getOcupado() == true){
-					
-					//System.out.print(" " + casa[i][j].pecas.getCor()+ " " );
-					
-				}else{
-				
-					System.out.print(" " + casa[i][j].getCor()+ " " );
-				}
+    Casa getCasa(int linha, int coluna){
+        return casa[linha][coluna];
+    }
 
-			}
-			System.out.println();
+    public void ExibirTabuleiro() throws UnknownHostException, IOException {
 
-		}
-	}
+        cliente = new Socket("10.11.150.71", 1234);
+
+        System.out.println("  1  2  3  4  5  6  7  8");
+        for (int i = 0; i < casa.length; i++) {
+
+            String str = String.valueOf(i + 1);
+            System.out.print(str);
+
+            for (int j = 0; j < casa[0].length; j++) {
+
+                if (casa[i][j].getOcupado() == true) {
+
+                    //System.out.print(" " + casa[i][j].pecas.getCor()+ " " );
+
+                } else {
+
+                    System.out.print(" " + casa[i][j].getCor() + " ");
+                }
+
+            }
+            System.out.println();
+
+        }
+    }
 }

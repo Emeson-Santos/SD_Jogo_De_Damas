@@ -2,50 +2,27 @@ package SD;
 
 public class Regras {
 
-	private static int ESQUERDA = 0;
-	private static int DIREITA = 1;
+	static final int MOVIMENTO_INVALIDO = -1;
 
-	public static void movimentoBranca(Casa casa){ //Possiveis posições de cada peca Branca
+	public static Movimentos movimentoBranca(int linha, int coluna){ //Possiveis posiï¿½ï¿½es de cada peca Branca
 
-		int linha = casa.getLinha();
-		int coluna  = casa.getColuna();
+		//int coluna  = casa.getColuna();
 
-		int novaLinha = linha - 1;
-		int[] novasColuna = new int[]{-1, -1};
-		if(coluna == 0){						//se estiver no limite do tabuleiro ele não passa para menos que (zero)
-			novasColuna[DIREITA] = coluna + 1; //movimento para direita
-		} else if(coluna == 7){					//Se estiver no limite da coluna a peca não vai para mais que 7
-			novasColuna[ESQUERDA] = coluna - 1; //movimento para esquerda
-		} else {
-			novasColuna[ESQUERDA] = coluna - 1; //movimento para esquerda
-			novasColuna[DIREITA] = coluna + 1;  //movimento para direita
-		}
-		
-		//===========================
-		
+		Movimentos movimentos = new Movimentos();
 
-		System.out.println("movimentos possiveis da peça Branca: linha " + novaLinha + ", coluna " + novasColuna[ESQUERDA] + "\n"
-				+ "linha " + novaLinha + ", coluna " + novasColuna[DIREITA]);
+		movimentos.setEsquerda(coluna - 1);
+		movimentos.setDireita(coluna + 1);
+		movimentos.setLinha(linha - 1);
+		return movimentos;
 	}
 
-	public static void movimentoPreta(Casa casa){//Possíveis posições de cada peça Preta
+	public static Movimentos movimentoPreta(int linha, int coluna){//Possï¿½veis posiï¿½ï¿½es de cada peï¿½a Preta
+		Movimentos movimentos = new Movimentos();
 
-		int linha = casa.getLinha();
-		int coluna  = casa.getColuna();
-
-		int novaLinha = linha + 1;
-		int[] novasColuna = new int[]{-1, -1};
-		if(coluna == 0){						//se estiver no limite do tabuleiro ele não passa para menos que (zero)
-			novasColuna[DIREITA] = coluna + 1; //movimento para direita
-		} else if(coluna == 7){					//Se estiver no limite da coluna a peca não vai para mais que 7
-			novasColuna[ESQUERDA] = coluna - 1; //movimento para esquerda
-		} else {
-			novasColuna[ESQUERDA] = coluna - 1; //movimento para esquerda
-			novasColuna[DIREITA] = coluna + 1;  //movimento para direita
-		}
-
-		System.out.println("movimentos possiveis da peça Preta: linha " + novaLinha + ", coluna " + novasColuna[ESQUERDA] + "\n"
-				+ "linha " + novaLinha + ", coluna " + novasColuna[DIREITA]);
+		movimentos.setEsquerda(coluna - 1);
+		movimentos.setDireita(coluna + 1);
+		movimentos.setLinha(linha + 1);
+		return movimentos;
 	}
 
 	public void MovimentacaoDamaPreta(){
@@ -59,7 +36,42 @@ public class Regras {
 	}
 	public void capturaObrigatoria(){
 		
-	}	
-	
+	}
 
+	public static class Movimentos{
+
+		private int linha, esquerda, direita;
+
+		private Movimentos() {
+			linha = esquerda = direita = MOVIMENTO_INVALIDO;
+		}
+
+		int getLinha() {
+			return linha;
+		}
+
+		private void setLinha(int linha){
+			if(posicaoValida(linha)) this.linha = linha;
+		}
+
+		int getEsquerda() {
+			return esquerda;
+		}
+
+		private void setEsquerda(int esquerda){
+			if(posicaoValida(esquerda)) this.esquerda = esquerda;
+		}
+
+		public int getDireita() {
+			return direita;
+		}
+
+		private void setDireita(int direita){
+			if(posicaoValida(direita)) this.direita = direita;
+		}
+
+		private boolean posicaoValida(int posicao){
+			return posicao >= 0 && posicao <= 7;
+		}
+	}
 }
