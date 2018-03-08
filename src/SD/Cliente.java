@@ -1,7 +1,6 @@
 package SD;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class Cliente {
@@ -22,26 +21,28 @@ public class Cliente {
             Socket clienteSocket = new Socket(Servidor.IP, Servidor.PORTA);
 
             mensageiro = new Mensageiro(clienteSocket);
-
-            String msg = mensageiro.ler();
+            String mensagem = mensageiro.ler();
             codigo = Integer.parseInt(mensageiro.ler());
-            System.out.println("Handshake client: <" + msg + ">, codigo: " + codigo);
-            msg = "Ola servidor, recebi o codigo " + codigo;
-            mensageiro.enviar(msg);
+            mensageiro.print('S', mensagem + " " + codigo);
 
-            dadosDesafiante();
+            mensagem = "Ola servidor, recebi o codigo " + codigo;
+            mensageiro.enviar(mensagem);
+            mensageiro.print('C', mensagem);
+
+            aguardarDesafiante();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void dadosDesafiante() {
+    private void aguardarDesafiante() {
 
         String msg = mensageiro.ler();
         String cod = mensageiro.ler();
         codDesafiante = Integer.parseInt(cod == null ? "-1" : cod);
-        System.out.println("Playing client: '" + msg + "' desafiante '" + codDesafiante + "'");
+        mensageiro.print('C', msg + " " + codDesafiante);
+        while(true){}
     }
 
 

@@ -15,7 +15,7 @@ public class Servidor {
         try {
             serverSocket = new ServerSocket(PORTA);
         } catch (IOException e) {
-            System.out.println("Porta '" + PORTA + "' ocupada");
+            errln("Porta '" + PORTA + "' ocupada");
         }
     }
 
@@ -25,8 +25,10 @@ public class Servidor {
 
     private void aceitarCliente() throws IOException {
 
+        errln("Servidor iniciado. Aguardando jogadores...");
         Conexao jogador = null;
-        while (true) {
+        boolean flag = true;
+        while (flag) {
             int codigo = getCodNovoCliente();
             if (jogador == null) {
 
@@ -42,16 +44,20 @@ public class Servidor {
 
                 desafiante.setDadosDesafiante(jogador.getIp(), jogador.getCod());
                 desafiante.start();
-
-                jogador = null;
+                flag = false;
             }
-            System.out.println("Conexão #" + codigo);
+
+            errln("Jogador #" + codigo + " conectado");
         }
+        errln("Conexão estabelecida: a partida ira iniciar");
+    }
+
+    private void errln(String mensagem){
+        System.err.println("[M] > " + mensagem);
     }
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Server running");
         Servidor server = new Servidor();
         server.aceitarCliente();
     }

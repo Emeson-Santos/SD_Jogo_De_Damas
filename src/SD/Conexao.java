@@ -17,6 +17,7 @@ public class Conexao extends Thread {
 
     void setAguardar(boolean aguardar) {
         this.aguardar = aguardar;
+        interrupt();
     }
 
     String getIp() {
@@ -34,29 +35,30 @@ public class Conexao extends Thread {
 
     public void run() {
         super.run();
-
-        mensageiro.enviar("Ola Cliente, sua id eh: ");
+        String mensagem = "Ola Cliente, sua id eh: ";
+        mensageiro.enviar(mensagem);
         mensageiro.enviar(cod + "");
-        String msg = mensageiro.ler();
+        mensageiro.print('S', mensagem + cod);
+        mensageiro.print('C', "Handshake: " + mensageiro.ler());
 
-        System.out.println("Handshake Server: <" + msg + ">");
         aguardarDesafiante();
     }
 
     private void aguardarDesafiante() {
         while (aguardar) {
             try {
-                Thread.sleep(2000);
-                System.out.println("Aguardando desafiante...");
+                Thread.sleep(5000);
+                mensageiro.print('S', "Aguardando desafiante...");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                mensageiro.print('S', "Desafiante conectado.");
             }
         }
         mensageiro.enviar("Desafiante");
         mensageiro.enviar(codDesafiante + "");
 
-        String msg = mensageiro.ler();
+        mensageiro.print('S', mensageiro.ler() + " " + codDesafiante);
 
-        System.out.println("Playing server " + msg);
+        while(true){}
     }
 }

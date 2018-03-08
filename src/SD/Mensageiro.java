@@ -21,6 +21,10 @@ public class Mensageiro {
         }
     }
 
+    void print(char prefix, String mensagem){
+        System.out.println("[" + prefix + "] > " + mensagem);
+    }
+
     void enviar(String msg){
         try {
             emissor.writeBytes(msg + "\n");
